@@ -147,6 +147,21 @@ summary{cursor:pointer;font-weight:600;min-height:40px;display:flex;align-items:
 .modal img{width:100%;border-radius:2px}
 .modal textarea{width:100%;min-height:260px;border:1.5px solid var(--line);border-radius:6px;padding:10px;background:var(--bg)}
 .busy{opacity:.6;pointer-events:none}
+/* Móvil: la muestra se queda fija arriba mientras bajas por los controles */
+@media (max-width:899px){
+  #edit .stage{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);
+    margin:0 calc(-1 * clamp(16px,4vw,40px));padding:8px clamp(16px,4vw,40px) 10px;gap:8px;
+    border-bottom:1px solid var(--line);box-shadow:0 6px 12px -10px rgba(0,0,0,.35)}
+  #edit .stage .hint{display:none}
+  #edit .stage-bar{flex-wrap:nowrap}
+  #edit .seg button{min-height:34px;padding:0 9px;font-size:.85rem}
+  #edit .stage-bar .btn.small{min-height:34px;padding:0 9px;font-size:.85rem;white-space:nowrap}
+  #edit .side{padding-top:8px}
+  #edit .seg{flex:1 1 auto;min-width:0}
+  #edit .seg button{flex:1 1 0;padding:0 4px}
+  #backZone .lg{display:none}
+}
+@media (min-width:900px){#backZone .sm{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -221,7 +236,7 @@ summary{cursor:pointer;font-weight:600;min-height:40px;display:flex;align-items:
           <button data-v="orig" aria-pressed="false">Original</button>
           <button data-v="split" aria-pressed="false">Comparar</button>
         </div>
-        <button class="btn small" id="backZone">Cambiar zona</button>
+        <button class="btn small" id="backZone" aria-label="Cambiar zona"><span class="lg">Cambiar zona</span><span class="sm">Zona</span></button>
       </div>
       <canvas id="editCv" aria-label="Muestra con los colores ajustados"></canvas>
       <p class="hint" id="editHint">Toca la foto para elegir el color que quieres cambiar.</p>
@@ -341,7 +356,7 @@ const name=i=>i===0?'Fondo':(S.k===2?'Moteado':'Moteado '+i);
 function fitCanvas(cv,wrap){
   const W=cv.width,H=cv.height;if(!W||!H)return;
   const aw=wrap.clientWidth;const wide=matchMedia('(min-width:900px)').matches;
-  const mh=Math.max(260,window.innerHeight*(wide?0.74:0.58));
+  const mh=Math.max(wide?260:170,window.innerHeight*(wide?0.74:(cv.id==='editCv'?0.36:0.58)));
   const s=Math.min(aw/W,mh/H);
   cv.style.width=Math.floor(W*s)+'px';cv.style.height=Math.floor(H*s)+'px';
 }
